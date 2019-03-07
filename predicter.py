@@ -11,15 +11,29 @@ import os
 import numpy as np
 from PIL import Image
 import cv2
+from mover import move_mouse
+from pynput import mouse
+import os
+import signal
+import threading
 
 training_data = []
-for ammo_type in os.listdir(os.getcwd() + '/data/'):
-    for gun in os.listdir(os.getcwd() + '/data/' + str(ammo_type)):
-        for gun_pos in os.listdir(os.getcwd() + '/data/' + ammo_type + '/' + gun):
-            for filename in os.listdir(os.getcwd() + '/data/' + ammo_type + '/' + gun + '/' + gun_pos):
-                im = Image.open(os.getcwd() + '/data/' + ammo_type + '/' + gun + '/' + gun_pos + '/' + filename)
-                training_data.append((im, gun, gun_pos))
+should_pull_down = True
 
+def fillTraining(path): 
+        global training_data 
+        
+        if 'jpeg' in path:
+                im = Image.open(path)
+                tokens = path.split('/')
+                training_data.append((im, tokens[3:5]))
+                return
+
+        for type_ in os.listdir(path):
+                fillTraining(path + '/' + type_)
+
+
+fillTraining(os.getcwd() + '/data')
 
 def mse(imageA, imageB):
 	# the 'Mean Squared Error' between the two images is the
@@ -38,28 +52,55 @@ def grab_screen():
     secondary = grabby(region=(1700,1030,1819,1054))
 
     min_ = 500
-    best_guess_gun = ''
-    best_guess_gun_pos = ''
-    for im, gun, gun_pos in training_data:
+    best_data = []
+    for im, data in training_data:
         error = min(mse(primary, np.asarray(im)), mse(secondary, np.asarray(im)))
         if error < min_:
             min_ = error
-            best_guess_gun = gun
-            best_guess_gun_pos = gun_pos
+            best_data = data
 
-    print(min_, best_guess_gun, best_guess_gun_pos)
+    print(min_, best_data)
+
+
+enabled = False
+def pull_down(press):
+    while 1:
+        global enabled
+        enabled = press
+        print(enabled, end='\r', flush=True)
+        while enabled == True:
+            print(enabled, end='\r', flush=True)
+            threading.Thread(target=move_mouse, args=(1,)).start()
+            time.sleep(0.005)
 
 
 def mousey(call):
     if isinstance(call, m.WheelEvent):
         time.sleep(0.05)
         grab_screen()
-
+    
 def keyboardy(call):
     time.sleep(0.05)
     grab_screen()
 
+def quitter(call):
+    print("quitting")
+    os.kill(os.getpid(),signal.SIGTERM)
+
 m.hook(mousey)
 keyboard.on_release_key('e', keyboardy)
-# Block forever, like `while True`.
-keyboard.wait()
+keyboard.on_release_key('l', quitter)
+
+def on_click(x, y, button, pressed):
+    global enabled
+    if button == mouse.Button.left and pressed == True:
+        enabled = True
+    else:
+        enabled = False
+
+t = threading.Thread(target=pull_down, args=(False,))
+t.start()
+# Collect events until released
+with mouse.Listener(on_click=on_click) as listener:
+    listener.join()
+
