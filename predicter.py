@@ -1,106 +1,46 @@
-import numpy as np
-from PIL import ImageGrab, ImageEnhance, Image
-from win32_screen import grab_screen as grabby
-import cv2
 import time
 import keyboard
-import time
 import mouse as m
 import random
 import os
-import numpy as np
-from PIL import Image
-import cv2
-from mover import move_mouse
 from pynput import mouse
 import os
 import signal
 import threading
+from guns.gun_detection.detect_gun import detect_gun
+from guns.gun_detection.setup_data.load_data import load_data
+from mouse_events.mouse_pull_down.pull_down import mouse_pull_down
 
-training_data = []
-should_pull_down = True
+training_data = load_data(os.getcwd() + '/data')
+equipped_gun = detect_gun(training_data)
+puller = mouse_pull_down()
 
-def fillTraining(path): 
-        global training_data 
-        
-        if 'jpeg' in path:
-                im = Image.open(path)
-                tokens = path.split('/')
-                training_data.append((im, tokens[3:5]))
-                return
-
-        for type_ in os.listdir(path):
-                fillTraining(path + '/' + type_)
-
-
-fillTraining(os.getcwd() + '/data')
-
-def mse(imageA, imageB):
-	# the 'Mean Squared Error' between the two images is the
-	# sum of the squared difference between the two images;
-	# NOTE: the two images must have the same dimension
-	err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
-	err /= float(imageA.shape[0] * imageA.shape[1])
-	
-	# return the MSE, the lower the error, the more "similar"
-	# the two images are
-	return err
-
-def grab_screen():
-    global im
-    primary = grabby(region=(1550,1030,1669,1054))
-    secondary = grabby(region=(1700,1030,1819,1054))
-
-    min_ = 500
-    best_data = []
-    for im, data in training_data:
-        error = min(mse(primary, np.asarray(im)), mse(secondary, np.asarray(im)))
-        if error < min_:
-            min_ = error
-            best_data = data
-
-    print(min_, best_data)
-
-
-enabled = False
-def pull_down(press):
-    while 1:
-        global enabled
-        enabled = press
-        print(enabled, end='\r', flush=True)
-        while enabled == True:
-            print(enabled, end='\r', flush=True)
-            threading.Thread(target=move_mouse, args=(1,)).start()
-            time.sleep(0.005)
-
-
-def mousey(call):
+def mouse_handler(call):
     if isinstance(call, m.WheelEvent):
         time.sleep(0.05)
-        grab_screen()
+        equipped_gun.detect()
     
-def keyboardy(call):
+def keyboard_handler(call):
     time.sleep(0.05)
-    grab_screen()
+    equipped_gun.detect()
 
-def quitter(call):
+def quit_handler(call):
     print("quitting")
     os.kill(os.getpid(),signal.SIGTERM)
 
-m.hook(mousey)
-keyboard.on_release_key('e', keyboardy)
-keyboard.on_release_key('l', quitter)
-
-def on_click(x, y, button, pressed):
-    global enabled
+def on_click_handler(x, y, button, pressed):
     if button == mouse.Button.left and pressed == True:
-        enabled = True
+        puller.enabled = True
     else:
-        enabled = False
+        puller.enabled = False
 
-t = threading.Thread(target=pull_down, args=(False,))
-t.start()
-# Collect events until released
-with mouse.Listener(on_click=on_click) as listener:
-    listener.join()
+if __name__ == "__main__":
+    
+    threading.Thread(target=puller.pull_down, args=(False,)).start()
 
+    # enable listening to keyboard and mouse events
+    m.hook(mouse_handler)
+    keyboard.on_release_key('e', keyboard_handler)
+    keyboard.on_release_key('l', quit_handler)
+    with mouse.Listener(on_click=on_click_handler) as listener:
+        listener.join()
