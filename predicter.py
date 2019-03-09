@@ -19,10 +19,12 @@ def mouse_handler(call):
     if isinstance(call, m.WheelEvent):
         time.sleep(0.05)
         equipped_gun.detect()
+        puller.equipped_gun = 'gun'
     
 def keyboard_handler(call):
     time.sleep(0.05)
     equipped_gun.detect()
+    puller.equipped_gun = 'gun'
 
 def quit_handler(call):
     print("quitting")
