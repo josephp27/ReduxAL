@@ -1,4 +1,4 @@
-# ALRedux
+# ReduxAL
 
 Currently only works with 1080p displays
 
@@ -9,7 +9,7 @@ Recoil             |  Recoil Reduced
 
 
 ## How it works
-ALRedux takes a small screenshot whenever a gun swap is signaled (scroll wheel event) or whenever a gun is picked up (e pressed). This image is compared against a database of images using mean squared error. If a gun is detected, and the gun is fired using the mouse left click, the corresponding recoil reduction settings from [gun_settings.py](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/guns/gun_settings/gun_settings.py) will be used to reduce recoil.
+ReduxAL takes a small screenshot whenever a gun swap is signaled (scroll wheel event) or whenever a gun is picked up (e pressed). This image is compared against a database of images using mean squared error. If a gun is detected, and the gun is fired using the mouse left click, the corresponding recoil reduction settings from [gun_settings.py](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/guns/gun_settings/gun_settings.py) will be used to reduce recoil.
 
 ## Adding your own custom recoil reduction settings
 These can be added into the gun_settings.py, listed above, and loaded into [pulldown.py](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/mouse_events/pull_down.py) 
