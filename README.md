@@ -2,10 +2,7 @@
 
 Currently only works with 1080p displays
 
-Run with:
-```
-python predicter.py
-```
+
 Recoil             |  Recoil Reduced
 :-------------------------:|:-------------------------:
 ![](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/examples/recoil.gif)  |  ![](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/examples/no-recoil.gif)
@@ -17,5 +14,18 @@ ALRedux takes a small screenshot whenever a gun swap is signaled (scroll wheel e
 ## Adding your own custom recoil reduction settings
 These can be added into the gun_settings.py, listed above, and loaded into [pulldown.py](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/mouse_events/pull_down.py) 
 
+## Running the application
+```
+Install requirements:
+pip install -r requirements.txt
 
-This program does not inject any code into the game and therefore should be hard to detect. Use at your own risk.
+Run with:
+
+python predicter.py
+```
+
+## TODO:
+Add requirements file and a lot of other guns
+
+## Disclaimer
+This program does not inject any code into the game and therefore should be hard to detect. Use at your own risk. I did this project for fun to get better with python and do not use this in game. I am not responsible if this results in you getting banned
