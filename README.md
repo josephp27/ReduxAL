@@ -15,12 +15,15 @@ ALRedux takes a small screenshot whenever a gun swap is signaled (scroll wheel e
 These can be added into the gun_settings.py, listed above, and loaded into [pulldown.py](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/mouse_events/pull_down.py) 
 
 ## Running the application
-```
+Install python 3.x from [python.org](https://www.python.org/)
+
+
 Install requirements:
+```
 pip install -r requirements.txt
-
+```
 Run with:
-
+```
 python predicter.py
 ```
 
