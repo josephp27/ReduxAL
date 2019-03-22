@@ -1,4 +1,7 @@
 # ReduxAL
+Medium post here: https://medium.com/@radpro/reduxal-a-smart-recoil-reducer-for-apex-legends-ad15ef415b7a
+
+
 Recoil             |  Recoil Reduced
 :-------------------------:|:-------------------------:
 ![](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/examples/recoil.gif)  |  ![](https://github.com/josephp27/ApexLegendsGunRecoilReducer/blob/master/examples/no-recoil.gif)
