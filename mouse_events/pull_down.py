@@ -16,3 +16,6 @@ class mouse_pull_down:
         print(self.enabled, end='\r', flush=True)
         if self.equipped_gun == 'r301':
             a.pull_down_r301(self)
+
+        elif self.equipped_gun == 'prowler':
+            a.pull_down_prowler(self)
