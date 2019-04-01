@@ -17,23 +17,26 @@ puller = mouse_pull_down()
 
 
 def mouse_handler(call):
+    # if scroll wheel detected, then kick off gun detection
     if isinstance(call, m.WheelEvent):
         time.sleep(0.05)
         puller.equipped_gun = equipped_gun.detect()
 
 
 def keyboard_handler(call):
+    # if e is pressed, kick off gun detection
     time.sleep(0.05)
-    equipped_gun.detect()
     puller.equipped_gun = equipped_gun.detect()
 
 
 def quit_handler(call):
     print("quitting")
+    # a normal exit won't work if the program hangs, need to do this
     os.kill(os.getpid(), signal.SIGTERM)
 
 
 def on_click_handler(x, y, button, pressed):
+    # if shooting detected, tell puller we are enabled to kick off pulling down
     if button == mouse.Button.left and pressed:
         puller.enabled = True
     else:
@@ -41,6 +44,8 @@ def on_click_handler(x, y, button, pressed):
 
 
 if __name__ == "__main__":
+    print("press L to quit")
+    # start our custom pull down listener
     threading.Thread(target=puller.pull_down, args=(False,)).start()
 
     # enable listening to keyboard and mouse events

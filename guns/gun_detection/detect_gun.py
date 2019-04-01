@@ -20,12 +20,16 @@ class detect_gun:
         return err
 
     def detect(self):
-        global im
+
+        # grab our small screenshot for both primary and secondary weapons
         primary = grabby(region=(1550, 1030, 1669, 1054))
         secondary = grabby(region=(1700, 1030, 1819, 1054))
 
+        # set max MSE to be 500
         min_ = 500
         best_data = []
+
+        # iterate through calculate MSE on all images in DB, finding the best match O(N) time complexity
         for im, data in self.training_data:
             error = min(self.mse(primary, np.asarray(im)), self.mse(secondary, np.asarray(im)))
             if error < min_:
