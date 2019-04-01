@@ -1,0 +1,9 @@
+keyboard==0.13.3
+mouse==0.7.0
+numpy==1.16.2
+opencv-python==4.0.0.21
+Pillow==5.4.1
+pynput==1.4.2
+pypiwin32==223
+pywin32==224
+six==1.12.0
