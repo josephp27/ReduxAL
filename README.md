@@ -30,7 +30,11 @@ python predicter.py
 ```
 
 ## TODO:
-Add requirements file and a lot of other guns
+Add a lot of other guns
+
+## BUGS:
+- Hooking libraries like to hang sometimes, so spawning threads mitigates this problem most of the time. 
+- Program hangs right after starting. Resolution: do not click within the command prompt or powershell window. Exit by pressing "L"
 
 ## Disclaimer
 This program does not inject any code into the game and therefore should be hard to detect. Use at your own risk. I did this project for fun to get better with python and do not use this in game. I am not responsible if this results in you getting banned
