@@ -30,9 +30,11 @@ python predicter.py
 ```
 
 ## TODO:
-Add a lot of other guns
+ - Add a lot of other guns
+ - Add more displays
+ - Allow for dynamic displays (Possibly OCR?)
 
-## BUGS:
+## Bugs:
 - Hooking libraries like to hang sometimes, so spawning threads mitigates this problem most of the time. 
 - Program hangs right after starting. Resolution: do not click within the command prompt or powershell window. Exit by pressing "L"
 
